@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Florist Assistant</title>
     <style>
-        /* РЎРРЎРўР•РњРђ РўР•Рњ РћР¤РћР РњР›Р•РќРРЇ */
+        /* СИСТЕМА ТЕМ ОФОРМЛЕНИЯ */
         :root {
             --bg: #ffffff; --text: #333; --accent: #2ecc71; --card: #f9f9f9;
         }
@@ -45,38 +45,38 @@
 <body data-theme="light">
 
 <header>
-    <h1 id="app-title">РџРѕРјРѕС‰РЅРёРє С„Р»РѕСЂРёСЃС‚Р°</h1>
+    <h1 id="app-title">Помощник флориста</h1>
     <div class="controls">
         <select id="lang-select" onchange="changeLang()">
-            <option value="ru">Р СѓСЃСЃРєРёР№</option>
+            <option value="ru">Русский</option>
             <option value="en">English</option>
             <option value="de">Deutsch</option>
         </select>
         <select id="theme-select" onchange="changeTheme()">
-            <option value="light">РЎРІРµС‚Р»Р°СЏ</option>
-            <option value="dark">РўРµРјРЅР°СЏ</option>
-            <option value="forest">Р›РµСЃ</option>
-            <option value="lavender">Р›Р°РІР°РЅРґР°</option>
-            <option value="rose">Р РѕР·Р°</option>
+            <option value="light">Светлая</option>
+            <option value="dark">Темная</option>
+            <option value="forest">Лес</option>
+            <option value="lavender">Лаванда</option>
+            <option value="rose">Роза</option>
         </select>
-        <button onclick="toggleVersion()" id="version-btn">Р’РµСЂСЃРёСЏ: Lite</button>
+        <button onclick="toggleVersion()" id="version-btn">Версия: Lite</button>
     </div>
 </header>
 
-<input type="text" class="search-box" id="search-input" placeholder="РџРѕРёСЃРє СЂР°СЃС‚РµРЅРёР№..." onkeyup="searchPlants()">
+<input type="text" class="search-box" id="search-input" placeholder="Поиск растений..." onkeyup="searchPlants()">
 
-<div id="pro-notice" class="hidden" style="color: orange; margin-bottom: 10px;">PRO: Р”РѕСЃС‚СѓРїРµРЅ РїРѕРёСЃРє РІ РёРЅС‚РµСЂРЅРµС‚Рµ!</div>
+<div id="pro-notice" class="hidden" style="color: orange; margin-bottom: 10px;">PRO: Доступен поиск в интернете!</div>
 
 <div class="plant-grid" id="plant-list">
-    <!-- РЎСЋРґР° JavaScript РІСЃС‚Р°РІРёС‚ СЂР°СЃС‚РµРЅРёСЏ -->
+    <!-- Сюда JavaScript вставит растения -->
 </div>
 
 <div class="sidebar">
-    <h3 id="fav-title">РР·Р±СЂР°РЅРЅРѕРµ</h3>
+    <h3 id="fav-title">Избранное</h3>
     <ul id="favorites-list"></ul>
     <div id="shop-links" class="hidden">
         <hr>
-        <p id="shop-text">РљСѓРїРёС‚СЊ РІ РјР°РіР°Р·РёРЅР°С…:</p>
+        <p id="shop-text">Купить в магазинах:</p>
         <a href="https://www.flowwow.com" target="_blank">FlowWow</a><br>
         <a href="https://www.obiru.ru" target="_blank">OBI</a><br>
         <a href="https://www.leroymerlin.ru" target="_blank">Leroy Merlin</a>
@@ -84,19 +84,19 @@
 </div>
 
 <script>
-    // Р‘РђР—Рђ Р”РђРќРќР«РҐ
+    // БАЗА ДАННЫХ
     const plants = [
-        { id: 1, name: {ru: "РђР»РѕСЌ Р’РµСЂР°", en: "Aloe Vera", de: "Aloe Vera"}, group: "home", img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=200" },
-        { id: 2, name: {ru: "Р РѕР·Р° РЎР°РґРѕРІР°СЏ", en: "Garden Rose", de: "Gartenrose"}, group: "garden", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=200" },
-        { id: 3, name: {ru: "Р¤РёРєСѓСЃ", en: "Ficus", de: "Feigen"}, group: "home", img: "https://images.unsplash.com/photo-1597055181300-e3633a207519?auto=format&fit=crop&w=200" },
-        { id: 4, name: {ru: "РџРёРѕРЅ", en: "Peony", de: "Pfingstrose"}, group: "garden", img: "https://images.unsplash.com/photo-1563241527-3004b7be0fab?auto=format&fit=crop&w=200" }
+        { id: 1, name: {ru: "Алоэ Вера", en: "Aloe Vera", de: "Aloe Vera"}, group: "home", img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=200" },
+        { id: 2, name: {ru: "Роза Садовая", en: "Garden Rose", de: "Gartenrose"}, group: "garden", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=200" },
+        { id: 3, name: {ru: "Фикус", en: "Ficus", de: "Feigen"}, group: "home", img: "https://images.unsplash.com/photo-1597055181300-e3633a207519?auto=format&fit=crop&w=200" },
+        { id: 4, name: {ru: "Пион", en: "Peony", de: "Pfingstrose"}, group: "garden", img: "https://images.unsplash.com/photo-1563241527-3004b7be0fab?auto=format&fit=crop&w=200" }
     ];
 
-    // РџР•Р Р•Р’РћР”Р«
+    // ПЕРЕВОДЫ
     const i18n = {
-        ru: { title: "РџРѕРјРѕС‰РЅРёРє С„Р»РѕСЂРёСЃС‚Р°", fav: "РР·Р±СЂР°РЅРЅРѕРµ", shop: "РљСѓРїРёС‚СЊ РІ РјР°РіР°Р·РёРЅР°С…", search: "РџРѕРёСЃРє СЂР°СЃС‚РµРЅРёР№..." },
+        ru: { title: "Помощник флориста", fav: "Избранное", shop: "Купить в магазинах", search: "Поиск растений..." },
         en: { title: "Florist Assistant", fav: "Favorites", shop: "Buy in shops", search: "Search plants..." },
-        de: { title: "Floristen-Assistent", fav: "Favoriten", shop: "In GeschГ¤ften kaufen", search: "Pflanzen suchen..." }
+        de: { title: "Floristen-Assistent", fav: "Favoriten", shop: "In Geschäften kaufen", search: "Pflanzen suchen..." }
     };
 
     let currentLang = 'ru';
@@ -111,9 +111,9 @@
                 <div class="plant-card">
                     <img src="${p.img}" alt="${p.name[currentLang]}">
                     <h4>${p.name[currentLang]}</h4>
-                    <p>${p.group === 'home' ? 'рџЏ ' : 'рџЊ»'}</p>
+                    <p>${p.group === 'home' ? '🏠' : '🌻'}</p>
                     <button class="favorite-btn" onclick="toggleFav(${p.id})">
-                        ${favorites.includes(p.id) ? 'вќ¤пёЏ' : 'рџ¤Ќ'}
+                        ${favorites.includes(p.id) ? '❤️' : '🤍'}
                     </button>
                 </div>
             `;
@@ -123,10 +123,10 @@
     function searchPlants() {
         const query = document.getElementById('search-input').value.toLowerCase();
         if (isPro && query.length > 3) {
-            // РРјРёС‚Р°С†РёСЏ РїРѕРёСЃРєР° РІ РёРЅС‚РµСЂРЅРµС‚Рµ РґР»СЏ PRO
+            // Имитация поиска в интернете для PRO
             document.getElementById('pro-notice').classList.remove('hidden');
         }
-        // РћР±С‹С‡РЅС‹Р№ С„РёР»СЊС‚СЂ
+        // Обычный фильтр
         const cards = document.querySelectorAll('.plant-card');
         cards.forEach(card => {
             const name = card.querySelector('h4').innerText.toLowerCase();
@@ -177,13 +177,13 @@
 
     function toggleVersion() {
         isPro = !isPro;
-        document.getElementById('version-btn').innerText = isPro ? "Р’РµСЂСЃРёСЏ: PRO" : "Р’РµСЂСЃРёСЏ: Lite";
-        alert(isPro ? "PRO Р°РєС‚РёРІРёСЂРѕРІР°РЅР° (10$)! Р”РѕСЃС‚СѓРїРЅС‹ СЃСЃС‹Р»РєРё РЅР° РјР°РіР°Р·РёРЅС‹ Рё СЂР°СЃС€РёСЂРµРЅРЅС‹Р№ РїРѕРёСЃРє." : "РџРµСЂРµРєР»СЋС‡РµРЅРѕ РЅР° Lite");
+        document.getElementById('version-btn').innerText = isPro ? "Версия: PRO" : "Версия: Lite";
+        alert(isPro ? "PRO активирована (10$)! Доступны ссылки на магазины и расширенный поиск." : "Переключено на Lite");
         updateFavoritesUI();
         searchPlants();
     }
 
-    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
+    // Инициализация
     renderPlants();
     updateFavoritesUI();
 </script>
