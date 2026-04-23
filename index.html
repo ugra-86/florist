@@ -26,20 +26,29 @@
         header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .controls { display: flex; gap: 10px; align-items: center; }
         
-        .search-box { width: 100%; max-width: 400px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 20px; }
+        .search-box { width: 100%; max-width: 400px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 20px; font-size: 16px; }
         
         .plant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
         .plant-card { background: var(--card); padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; }
         .plant-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
         
         .badge-pro { background: orange; color: white; padding: 2px 5px; font-size: 10px; border-radius: 3px; position: absolute; top: 10px; right: 10px; }
-        .favorite-btn { cursor: pointer; font-size: 20px; border: none; background: none; color: var(--accent); }
+        .favorite-btn { cursor: pointer; font-size: 24px; border: none; background: none; }
         
-        .sidebar { position: fixed; right: 20px; top: 100px; background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid var(--accent); }
+        .sidebar { position: sticky; top: 20px; background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid var(--accent); margin-top: 20px; }
         .hidden { display: none; }
         
-        button { padding: 8px 12px; cursor: pointer; border-radius: 5px; border: none; background: var(--accent); color: white; }
-        select { padding: 8px; border-radius: 5px; }
+        button { padding: 8px 12px; cursor: pointer; border-radius: 5px; border: none; background: var(--accent); color: white; font-weight: bold; }
+        select { padding: 8px; border-radius: 5px; cursor: pointer; }
+
+        .shop-link { display: block; margin: 5px 0; color: var(--accent); text-decoration: none; font-weight: bold; }
+        .shop-link:hover { text-decoration: underline; }
+
+        @media (min-width: 768px) {
+            .main-container { display: flex; gap: 30px; }
+            .content { flex: 3; }
+            .sidebar { flex: 1; height: fit-content; }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -63,57 +72,62 @@
     </div>
 </header>
 
-<input type="text" class="search-box" id="search-input" placeholder="Поиск растений..." onkeyup="searchPlants()">
+<div class="main-container">
+    <div class="content">
+        <input type="text" class="search-box" id="search-input" placeholder="Поиск растений..." onkeyup="searchPlants()">
+        <div id="pro-notice" class="hidden" style="color: orange; font-weight: bold; margin-bottom: 15px;">PRO: Выполняется поиск в глобальной сети...</div>
+        <div class="plant-grid" id="plant-list">
+            <!-- Сюда JavaScript вставит растения -->
+        </div>
+    </div>
 
-<div id="pro-notice" class="hidden" style="color: orange; margin-bottom: 10px;">PRO: Доступен поиск в интернете!</div>
-
-<div class="plant-grid" id="plant-list">
-    <!-- Сюда JavaScript вставит растения -->
-</div>
-
-<div class="sidebar">
-    <h3 id="fav-title">Избранное</h3>
-    <ul id="favorites-list"></ul>
-    <div id="shop-links" class="hidden">
-        <hr>
-        <p id="shop-text">Купить в магазинах:</p>
-        <a href="https://www.flowwow.com" target="_blank">FlowWow</a><br>
-        <a href="https://www.obiru.ru" target="_blank">OBI</a><br>
-        <a href="https://www.leroymerlin.ru" target="_blank">Leroy Merlin</a>
+    <div class="sidebar">
+        <h3 id="fav-title">Избранное</h3>
+        <ul id="favorites-list"></ul>
+        <div id="shop-links" class="hidden">
+            <hr>
+            <p id="shop-text">Купить в магазинах:</p>
+            <a href="https://www.ozon.ru/category/semena-rasteniya-i-tsvety-14501/" class="shop-link" target="_blank">OZON</a>
+            <a href="https://www.wildberries.ru/catalog/dom/dacha-i-sad/semena-i-sazhentsy" class="shop-link" target="_blank">Wildberries</a>
+            <a href="https://semena.ru" class="shop-link" target="_blank">Semena.ru</a>
+        </div>
     </div>
 </div>
 
 <script>
     // БАЗА ДАННЫХ
     const plants = [
-        { id: 1, name: {ru: "Алоэ Вера", en: "Aloe Vera", de: "Aloe Vera"}, group: "home", img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=200" },
-        { id: 2, name: {ru: "Роза Садовая", en: "Garden Rose", de: "Gartenrose"}, group: "garden", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=200" },
-        { id: 3, name: {ru: "Фикус", en: "Ficus", de: "Feigen"}, group: "home", img: "https://images.unsplash.com/photo-1597055181300-e3633a207519?auto=format&fit=crop&w=200" },
-        { id: 4, name: {ru: "Пион", en: "Peony", de: "Pfingstrose"}, group: "garden", img: "https://images.unsplash.com/photo-1563241527-3004b7be0fab?auto=format&fit=crop&w=200" }
+        { id: 1, name: {ru: "Алоэ Вера", en: "Aloe Vera", de: "Aloe Vera"}, group: "home", img: "https://images.unsplash.com/photo-1596547609652-9cf5d8d76921?auto=format&fit=crop&w=300" },
+        { id: 2, name: {ru: "Роза Садовая", en: "Garden Rose", de: "Gartenrose"}, group: "garden", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300" },
+        { id: 3, name: {ru: "Фикус Бенджамина", en: "Ficus Benjamina", de: "Birkenfeige"}, group: "home", img: "https://images.unsplash.com/photo-1597055181300-e3633a207519?auto=format&fit=crop&w=300" },
+        { id: 4, name: {ru: "Пион Розовый", en: "Pink Peony", de: "Rosa Pfingstrose"}, group: "garden", img: "https://images.unsplash.com/photo-1563241527-3004b7be0fab?auto=format&fit=crop&w=300" },
+        { id: 5, name: {ru: "Сансевиерия", en: "Snake Plant", de: "Bogenhanf"}, group: "home", img: "https://images.unsplash.com/photo-1599599810694-b5b37304c041?auto=format&fit=crop&w=300" },
+        { id: 6, name: {ru: "Бархатцы", en: "Marigold", de: "Tagetes"}, group: "garden", img: "https://images.unsplash.com/photo-1588625500500-6c905333550c?auto=format&fit=crop&w=300" }
     ];
 
     // ПЕРЕВОДЫ
     const i18n = {
-        ru: { title: "Помощник флориста", fav: "Избранное", shop: "Купить в магазинах", search: "Поиск растений..." },
-        en: { title: "Florist Assistant", fav: "Favorites", shop: "Buy in shops", search: "Search plants..." },
-        de: { title: "Floristen-Assistent", fav: "Favoriten", shop: "In Geschäften kaufen", search: "Pflanzen suchen..." }
+        ru: { title: "Помощник флориста", fav: "Избранное", shop: "Купить в магазинах:", search: "Поиск растений..." },
+        en: { title: "Florist Assistant", fav: "Favorites", shop: "Buy in shops:", search: "Search plants..." },
+        de: { title: "Floristen-Assistent", fav: "Favoriten", shop: "In Geschäften kaufen:", search: "Pflanzen suchen..." }
     };
 
     let currentLang = 'ru';
     let isPro = false;
-    let favorites = JSON.parse(localStorage.getItem('favs')) || [];
+    let favorites = JSON.parse(localStorage.getItem('favs_florist')) || [];
 
     function renderPlants() {
         const list = document.getElementById('plant-list');
         list.innerHTML = '';
         plants.forEach(p => {
+            const isFav = favorites.includes(p.id);
             list.innerHTML += `
                 <div class="plant-card">
                     <img src="${p.img}" alt="${p.name[currentLang]}">
                     <h4>${p.name[currentLang]}</h4>
-                    <p>${p.group === 'home' ? '🏠' : '🌻'}</p>
+                    <p>${p.group === 'home' ? '🏠 Комнатное' : '🌻 Садовое'}</p>
                     <button class="favorite-btn" onclick="toggleFav(${p.id})">
-                        ${favorites.includes(p.id) ? '❤️' : '🤍'}
+                        ${isFav ? '❤️' : '🤍'}
                     </button>
                 </div>
             `;
@@ -122,11 +136,14 @@
 
     function searchPlants() {
         const query = document.getElementById('search-input').value.toLowerCase();
-        if (isPro && query.length > 3) {
-            // Имитация поиска в интернете для PRO
-            document.getElementById('pro-notice').classList.remove('hidden');
+        const notice = document.getElementById('pro-notice');
+        
+        if (isPro && query.length > 2) {
+            notice.classList.remove('hidden');
+        } else {
+            notice.classList.add('hidden');
         }
-        // Обычный фильтр
+
         const cards = document.querySelectorAll('.plant-card');
         cards.forEach(card => {
             const name = card.querySelector('h4').innerText.toLowerCase();
@@ -140,7 +157,7 @@
         } else {
             favorites.push(id);
         }
-        localStorage.setItem('favs', JSON.stringify(favorites));
+        localStorage.setItem('favs_florist', JSON.stringify(favorites));
         updateFavoritesUI();
         renderPlants();
     }
@@ -153,10 +170,12 @@
             if (p) favList.innerHTML += `<li>${p.name[currentLang]}</li>`;
         });
         
+        const shopLinks = document.getElementById('shop-links');
+        // Показываем ссылки только в PRO и если есть избранное
         if (isPro && favorites.length > 0) {
-            document.getElementById('shop-links').classList.remove('hidden');
+            shopLinks.classList.remove('hidden');
         } else {
-            document.getElementById('shop-links').classList.add('hidden');
+            shopLinks.classList.add('hidden');
         }
     }
 
@@ -178,9 +197,13 @@
     function toggleVersion() {
         isPro = !isPro;
         document.getElementById('version-btn').innerText = isPro ? "Версия: PRO" : "Версия: Lite";
-        alert(isPro ? "PRO активирована (10$)! Доступны ссылки на магазины и расширенный поиск." : "Переключено на Lite");
+        document.getElementById('version-btn').style.background = isPro ? "orange" : "var(--accent)";
+        
+        if(isPro) {
+            alert("PRO-версия активирована! Доступны ссылки на OZON, Wildberries и Semena.ru в разделе избранного.");
+        }
+        
         updateFavoritesUI();
-        searchPlants();
     }
 
     // Инициализация
